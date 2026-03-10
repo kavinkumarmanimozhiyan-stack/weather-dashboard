@@ -20,6 +20,7 @@ import { Deletecity } from "@/slices/cityslice";
 import { changeTheme } from "@/slices/themeslice";
 import { Heart } from 'lucide-react';
 import { Cloudy } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 
 function Home() {
     const dispatch = useDispatch();
@@ -132,7 +133,9 @@ function Home() {
             </div >
             <div className=" flex flex-wrap gap-8 justify-center px-5  py-10 ">
                 {selectcity && selectcity?.map((city, index) => (
-                    <Card key={index} className="max-w-xs shadow-lg">
+                    <Card key={index} className="max-w-xs shadow-lg relative">
+                        {/* </Card> < onClick={() => deleteCity(index)}>delete</> */}
+                          <CircleX className="absolute top-2 right-2  cursor-pointer hover:text-red-700 transition" onClick={() => deleteCity(index)}/>
                         <CardHeader>
                             <CardTitle className="font-bold">{city?.city}</CardTitle>
                             <CardDescription>
@@ -148,10 +151,10 @@ function Home() {
                             </CardAction>
                         </CardHeader>
                         <CardContent>
-                            <div className="flex direction-row gap-4 mb-5">
-                                <h1 className="text-4xl font-bold text-violet-500">{city?.temperature}</h1>
-                                <p className="inline border-1 px-1 text-center pt-2 bg-violet-100 text-sm font-semibold w-auto  rounded-sm dark:text-black" > {weatherCondition(city?.condition)}</p>
-                                <Button onClick={() => deleteCity(index)}>delete</Button>
+                            <div className="flex direction-row justify-between mb-5">
+                                <h1 className="text-4xl font-bold text-violet-500">{city?.temperature}&deg;C</h1>
+                                <p className="inline border-1 px-3 text-center pt-2 bg-violet-100 text-sm font-semibold w-auto  rounded-sm dark:text-black" > {weatherCondition(city?.condition)}</p>
+                               
                             </div>
                             <hr></hr>
                         </CardContent>
@@ -159,7 +162,7 @@ function Home() {
                             <div className="flex flex-direction-row gap-2">
                                 <div className="border-1 rounded-lg py-2 px-2 w-35 bg-blue-100">
                                     <h1 className="font-bold text-sm text-blue-500">Humidity</h1>
-                                    <h1 className="font-bold text-start text-xl dark:text-black ">{city?.humidity}</h1>
+                                    <h1 className="font-bold text-start text-xl dark:text-black ">{city?.humidity}%</h1>
                                 </div>
                                 <div className="border-1 rounded-lg py-2 px-2 w-35 bg-violet-100">
                                     <h2 className="font-bold text-sm text-violet-500">Wind Speed</h2>
