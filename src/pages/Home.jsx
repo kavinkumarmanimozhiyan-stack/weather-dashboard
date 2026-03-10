@@ -28,6 +28,7 @@ function Home() {
     const [cityName, setcityName] = useState("");
     const [searchcityy, setsearchcityy] = useState([]);
     const [theme, settheme] = useState(thememode);
+    
 
     useEffect(() => {
         if (theme === "dark") {
@@ -39,7 +40,7 @@ function Home() {
 
     async function searchcity(e) {
         const value1 = e.target.value;
-        console.log("value1", value1)
+        //console.log("value1", value1)
         setcityName(value1)
         if (value1.length < 3) {
             setsearchcityy([]);
@@ -74,7 +75,7 @@ function Home() {
     }
 
     function weatherCondition(condition) {
-        console.log(condition)
+        //console.log(condition)
         const conditions = {
             0: "Clear sky",
             1: "Mainly clear",
@@ -111,7 +112,7 @@ function Home() {
 
     return (
         <div className="mt-0 min-h-screen bg-sky-100 dark:bg-black">
-            <div className="text-right">
+            <div className="text-right sticky top-0">
                 <Button onClick={toggletheme}>{theme === "light" ? "Dark" : "Light"}Theme</Button>
             </div>
             <div>
