@@ -69,7 +69,7 @@ function Home() {
     }
 
     function toggletheme() {
-        const newtheme = theme === "light" ? "dark" : "light"
+        const newtheme = theme === "dark" ? "light" : "dark"
         settheme(newtheme)
         dispatch(changeTheme(newtheme));
     }
@@ -113,7 +113,7 @@ function Home() {
     return (
         <div className="mt-0 min-h-screen bg-sky-100 dark:bg-black">
             <div className="text-right sticky top-0">
-                <Button onClick={toggletheme}>{theme === "light" ? "Dark" : "Light"}Theme</Button>
+                <Button onClick={toggletheme}>{theme === "dark" ? "Light" : "Dark"}Theme</Button>
             </div>
             <div>
                 <h1 className="text-5xl font-bold text-blue-500 text-center pt-10">Weather Dashboard</h1>
