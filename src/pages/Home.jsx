@@ -21,15 +21,19 @@ import { changeTheme } from "@/slices/themeslice";
 import { Heart } from 'lucide-react';
 import { Cloudy } from 'lucide-react';
 import { CircleX } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { CheckCircle2Icon, InfoIcon } from "lucide-react"
 
 function Home() {
     const dispatch = useDispatch();
     const selectcity = useSelector(state => state?.cityname?.city)
+    //console.log(selectcity)
     const thememode = useSelector(state => state?.theme?.theme?.mode)
     const [cityName, setcityName] = useState("");
     const [searchcityy, setsearchcityy] = useState([]);
     const [theme, settheme] = useState(thememode);
-    
+    const [showAlert, setShowAlert] = useState(false);
+
 
     useEffect(() => {
         if (theme === "dark") {
@@ -52,9 +56,17 @@ function Home() {
         setsearchcityy(data?.results);
     }
 
+
     const searchcitybutton = async () => {
         const data = await getWeatherByCityName(cityName);
-        console.log(data)
+        if (selectcity.some(city => city?.city === data?.city && city?.country.toLowerCase() === data?.country.toLowerCase())) {
+            // alert("City already exists");
+            setShowAlert(true);
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 3000)
+            return;
+        }
         dispatch(Addcity(data));
         setcityName('')
         setsearchcityy([])
@@ -113,19 +125,36 @@ function Home() {
 
     return (
         <div className="mt-0 min-h-screen bg-sky-100 dark:bg-black">
-            <div className="text-right sticky top-0">
+
+            {showAlert && (
+                <div className="flex justify-center py-4">
+                    <Alert className="w-80  bg-blue-300 text-black">
+                        <InfoIcon />
+                        <AlertTitle>City already exists</AlertTitle>
+                        <AlertDescription className="text-black">
+                            This city is already added to the dashboard.
+                        </AlertDescription>
+                    </Alert>
+                </div>
+            )}
+
+            <div className="text-right sticky top-0 p-2">
                 <Button onClick={toggletheme}>{theme === "dark" ? "Light" : "Dark"}Theme</Button>
             </div>
             <div>
-                <h1 className="text-5xl font-bold text-blue-500 text-center pt-10">Weather Dashboard</h1>
+                <h1 className="text-5xl font-bold text-blue-500 text-center pt-0">Weather Dashboard</h1>
                 <p className="text-sm font-semibold text-center mt-5">Get real time weather updates for multiple cities worldwide</p>
             </div>
-            <div className="flex justify-center ">
+            <div className="px-5 flex justify-center md:flex justify-center ">
                 <div>
-                    <Input placeholder="Type atlest 3 characters to see the city suggestions" className=" w-60 font-semibold mt-10 md: w-100  mt-10 " value={cityName} onChange={(e) => searchcity(e)} />
-                    <ul className=" w-100 bg-white border rounded shadow ">
+                    <Input placeholder="Type atlest 3 characters to see the city suggestions" className="w-60 font-semibold mt-10 md:w-100  mt-10 " value={cityName} onChange={(e) => searchcity(e)} />
+
+                    <ul className="w-60 md:w-100 bg-white border rounded shadow ">
+                        {/* {searchcityy?.length === 0 && cityName.length >= 3 && (
+                            <li className="p-2 text-gray-500">Invalid city</li>
+                        )} */}
                         {searchcityy?.map((city, index) => (
-                            <li key={index} className="p-2 hover:bg-gray-200 cursor-pointer dark:text-black" onClick={() => cityinput({ city })}>{city?.name}</li>
+                            <li key={index} className="p-2 hover:bg-gray-200 cursor-pointer dark:text-black" onClick={() => cityinput({ city })}>{city?.name}-{city?.country}</li>
                         ))}
                     </ul>
                 </div>
@@ -135,7 +164,7 @@ function Home() {
                 {selectcity && selectcity?.map((city, index) => (
                     <Card key={index} className="max-w-xs shadow-lg relative">
                         {/* </Card> < onClick={() => deleteCity(index)}>delete</> */}
-                          <CircleX className="absolute top-2 right-2  cursor-pointer hover:text-red-700 transition" onClick={() => deleteCity(index)}/>
+                        <CircleX className="absolute top-2 right-2  cursor-pointer hover:text-red-700 transition" onClick={() => deleteCity(index)} />
                         <CardHeader>
                             <CardTitle className="font-bold">{city?.city}</CardTitle>
                             <CardDescription>
@@ -154,7 +183,7 @@ function Home() {
                             <div className="flex direction-row justify-between mb-5">
                                 <h1 className="text-4xl font-bold text-violet-500">{city?.temperature}&deg;C</h1>
                                 <p className="inline border-1 px-3 text-center pt-2 bg-violet-100 text-sm font-semibold w-auto  rounded-sm dark:text-black" > {weatherCondition(city?.condition)}</p>
-                               
+
                             </div>
                             <hr></hr>
                         </CardContent>
