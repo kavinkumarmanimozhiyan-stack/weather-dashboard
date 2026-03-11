@@ -15,11 +15,8 @@ import {
 import { useDispatch } from "react-redux";
 import { Addcity } from "@/slices/cityslice";
 import { useSelector } from 'react-redux';
-import { Icon } from "lucide-react";
 import { Deletecity } from "@/slices/cityslice";
 import { changeTheme } from "@/slices/themeslice";
-import { Heart } from 'lucide-react';
-import { Cloudy } from 'lucide-react';
 import { CircleX } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle2Icon, InfoIcon } from "lucide-react"
@@ -33,7 +30,6 @@ function Home() {
     const [searchcityy, setsearchcityy] = useState([]);
     const [theme, settheme] = useState(thememode);
     const [showAlert, setShowAlert] = useState(false);
-
 
     useEffect(() => {
         if (theme === "dark") {
@@ -55,7 +51,6 @@ function Home() {
         //console.log(data?.results)
         setsearchcityy(data?.results);
     }
-
 
     const searchcitybutton = async () => {
         const data = await getWeatherByCityName(cityName);
@@ -124,25 +119,12 @@ function Home() {
     }
 
     return (
-        <div className="mt-0 min-h-screen bg-sky-100 dark:bg-black">
-
-            {showAlert && (
-                <div className="flex justify-center py-4">
-                    <Alert className="w-80  bg-blue-300 text-black">
-                        <InfoIcon />
-                        <AlertTitle>City already exists</AlertTitle>
-                        <AlertDescription className="text-black">
-                            This city is already added to the dashboard.
-                        </AlertDescription>
-                    </Alert>
-                </div>
-            )}
-
+        <div className="mt-0 min-h-screen bg-indigo-50 dark:bg-black">
             <div className="text-right sticky top-0 p-2">
-                <Button onClick={toggletheme}>{theme === "dark" ? "Light" : "Dark"}Theme</Button>
+                <Button className="cursor-pointer" onClick={toggletheme}>{theme === "dark" ? "Light" : "Dark"}Theme</Button>
             </div>
             <div>
-                <h1 className="text-5xl font-bold text-blue-500 text-center pt-0">Weather Dashboard</h1>
+                <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 text-center pt-0  dark:bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Weather Dashboard</h1>
                 <p className="text-sm font-semibold text-center mt-5">Get real time weather updates for multiple cities worldwide</p>
             </div>
             <div className="px-5 flex justify-center md:flex justify-center ">
@@ -158,8 +140,21 @@ function Home() {
                         ))}
                     </ul>
                 </div>
-                <Button className=" ml-5  mt-10  " onClick={searchcitybutton}>Search</Button>
+                <Button className=" ml-5  mt-10 cursor-pointer  " onClick={searchcitybutton}>Search</Button>
             </div >
+
+            {showAlert && (
+                <div className="flex justify-center py-4 ">
+                    <Alert className="w-80 top-2 bg-blue-300 text-black">
+                        <InfoIcon />
+                        <AlertTitle>City already exists</AlertTitle>
+                        <AlertDescription className="text-black">
+                            This city is already added to the dashboard.
+                        </AlertDescription>
+                    </Alert>
+                </div>
+            )}
+
             <div className=" flex flex-wrap gap-8 justify-center px-5  py-10 ">
                 {selectcity && selectcity?.map((city, index) => (
                     <Card key={index} className="max-w-xs shadow-lg relative">
@@ -181,8 +176,8 @@ function Home() {
                         </CardHeader>
                         <CardContent>
                             <div className="flex direction-row justify-between mb-5">
-                                <h1 className="text-4xl font-bold text-violet-500">{city?.temperature}&deg;C</h1>
-                                <p className="inline border-1 px-3 text-center pt-2 bg-violet-100 text-sm font-semibold w-auto  rounded-sm dark:text-black" > {weatherCondition(city?.condition)}</p>
+                                <h1 className="text-4xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">{city?.temperature}&deg;C</h1>
+                                <p className="inline border-1 px-3 bg-gradient-to-r from-blue-200 to-purple-200  text-center pt-2  text-sm font-semibold w-auto  rounded-sm dark:text-black" > {weatherCondition(city?.condition)}</p>
 
                             </div>
                             <hr></hr>
